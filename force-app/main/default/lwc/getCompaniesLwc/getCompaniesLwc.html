@@ -2,11 +2,12 @@
 	<lightning-input value={name} onchange={handleNameChange} label="Name"></lightning-input>    
 	<lightning-input value={zip} onchange={handleZipChange} label="Zip"></lightning-input>    
 	<lightning-button label="Search" onclick={doSearch}></lightning-button>
+	<lightning-button label="Add Accounts" onclick={addToSF}></lightning-button>
 
 	<template if:true={tableData}>
 		<lightning-layout>
 			<lightning-layout-item size="6">
-				<lightning-datatable columns={resultColumns} data={tableData} key-field="place_id"></lightning-datatable>>
+				<lightning-datatable columns={resultColumns} data={tableData} key-field="id"></lightning-datatable>>
 			</lightning-layout-item>
 			<lightning-layout-item size="6">
 				<lightning-map map-markers={mapMarkers} markers-title="Map of Places" list-view="hidden"></lightning-map>

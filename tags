@@ -4,6 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Company	force-app/main/default/classes/Company.cls	/^public class Company{$/;"	c
 Company	force-app/main/default/classes/GetCompaniesController.cls	/^    class Company{$/;"	c	class:GetCompaniesController
 GetCompaniesController	force-app/main/default/classes/GetCompaniesController.cls	/^public class GetCompaniesController {$/;"	c
 companySearch	force-app/main/default/classes/GetCompaniesController.cls	/^    public static String companySearch(String name,String zip){$/;"	m	class:GetCompaniesController

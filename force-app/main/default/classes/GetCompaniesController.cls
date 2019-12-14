@@ -1,18 +1,5 @@
 public class GetCompaniesController {
 
-    class Company{
-
-        @AuraEnabled public String name{get;set;}
-        @AuraEnabled public String phone{get;set;}
-        @AuraEnabled public String address{get;set;}
-        @AuraEnabled public String types{get;set;}
-        @AuraEnabled public Decimal lat{get;set;}
-        @AuraEnabled public Decimal lng{get;set;}
-        @AuraEnabled public String rating{get;set;}
-        @AuraEnabled public String id{get;set;}
-
-    }
-
     @AuraEnabled
     public static String companySearch(String name,String zip){
 
@@ -31,17 +18,17 @@ public class GetCompaniesController {
     }
 
     @AuraEnabled
-    public static void saveMultipleAccounts(String[] acctIds){
+    public static void saveMultipleAccounts(String[] strAccounts){
         Account[] acctsToAdd = new Account[]{};
-        for(String acct:acctIds){
-            acctsToAdd.add(prepareAccountFromId(acct));
+        for(String strAcct:strAccounts){
+            acctsToAdd.add(prepareAccountFromId(strAcct));
         }
         upsert acctsToAdd Place_Id__c;
     }
 
 
-    private static Account prepareAccountFromId(String acctString){
-        Company cmp = (Company)JSON.deserialize(acctString, Company.class);
+    private static Account prepareAccountFromId(String accString){
+				Company cmp = (Company)JSON.deserialize(accString,Company.class);
         String[] addrsplit = cmp.address.split(',');
         String country = addrsplit.remove(addrsplit.size()-1);
         String statezip = addrsplit.remove(addrsplit.size()-1);
@@ -49,8 +36,8 @@ public class GetCompaniesController {
         String state = statezip.split(' ')[1];
         String street = String.join(addrsplit, ',');
         String stdRating = '';
-        if(!String.isBlank(cmp.rating)){
-            stdRating = Decimal.valueOf(cmp.rating)>4?'Hot':Decimal.valueOf(cmp.rating)>3?'Warm':'Cold';
+        if(cmp.rating!=null){
+            stdRating = cmp.rating>4?'Hot':cmp.rating>3?'Warm':'Cold';
         }
 
         String placeDetailsUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid='+cmp.id+'&key='+Label.googleapikey;
@@ -76,7 +63,7 @@ public class GetCompaniesController {
                 }
             }
         }
-        Account a = new Account(Name=cmp.name,BillingStreet=street,BillingState=state,BillingPostalCode=zip,BillingCountry=country,Place_Id__c=cmp.id,BillingLatitude=cmp.lat,BillingLongitude=cmp.lng,Rating__c=cmp.rating,Description=cmp.types,Rating=stdRating,Phone=ph,Website=website);
+        Account a = new Account(Name=cmp.name,BillingStreet=street,BillingState=state,BillingPostalCode=zip,BillingCountry=country,Place_Id__c=cmp.id,BillingLatitude=cmp.lat,BillingLongitude=cmp.lng,Description=cmp.types,Rating=stdRating,Phone=ph,Website=website);
         return a;
     }
 
