@@ -1,18 +1,51 @@
 <template>
-	<lightning-input value={name} onchange={handleNameChange} label="Name"></lightning-input>    
-	<lightning-input value={zip} onchange={handleZipChange} label="Zip"></lightning-input>    
-	<lightning-button label="Search" onclick={doSearch}></lightning-button>
-	<lightning-button label="Add Accounts" onclick={addToSF}></lightning-button>
+  <lightning-layout multiple-rows="false">
+    <lightning-layout-item size="6" padding="horizontal-small">
+      <lightning-input
+        value={name}
+        onchange={handleNameChange}
+        label="Name"
+        onkeyup={handleKeyup}
+      ></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item size="6" padding="horizontal-small">
+      <lightning-input
+        value={zip}
+        onchange={handleZipChange}
+        onkeyup={handleKeyup}
+        label="Zip"
+      ></lightning-input>
+    </lightning-layout-item>
+    <lightning-layout-item
+      size="12"
+      flexibility="auto"
+      padding="horizontal-small"
+    >
+      <lightning-button label="Search" onclick={doSearch}></lightning-button>
+      <lightning-button
+        label="Add Accounts"
+        onclick={addToSF}
+      ></lightning-button>
+    </lightning-layout-item>
+  </lightning-layout>
 
-	<template if:true={tableData}>
-		<lightning-layout>
-			<lightning-layout-item size="6">
-				<lightning-datatable columns={resultColumns} data={tableData} key-field="id"></lightning-datatable>>
-			</lightning-layout-item>
-			<lightning-layout-item size="6">
-				<lightning-map map-markers={mapMarkers} markers-title="Map of Places" list-view="hidden"></lightning-map>
-			</lightning-layout-item>
-		</lightning-layout>
-	</template>
-
+  <template if:true={tableData}>
+    <lightning-layout class="slds-m-top_small">
+      <lightning-layout-item size="6">
+        <lightning-datatable
+          columns={resultColumns}
+          data={tableData}
+          key-field="id"
+        ></lightning-datatable
+        >>
+      </lightning-layout-item>
+      <lightning-layout-item size="6" padding="horizontal-small">
+        <lightning-map
+          map-markers={mapMarkers}
+          markers-title="Map of Places"
+          list-view="hidden"
+        ></lightning-map>
+      </lightning-layout-item>
+    </lightning-layout>
+  </template>
 </template>

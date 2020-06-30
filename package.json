@@ -1,0 +1,21 @@
+{
+  "name": "sfplacesapi",
+  "version": "1.0.0",
+  "description": "This guide helps Salesforce developers who are new to Visual Studio Code go from zero to a deployed app using Salesforce Extensions for VS Code and Salesforce CLI.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@salesforce/eslint-config-lwc": "^0.7.0",
+    "eslint": "^7.3.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@suraj.github.com:surajp/googleplacestosf.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
