@@ -1,4 +1,11 @@
 public class GetCompaniesController {
+  private class AddressDTO {
+    String street;
+    String zip;
+    String country;
+    String state;
+  }
+
   @AuraEnabled
   public static String companySearch(String name, String zip) {
     if (name == null || String.isEmpty(name))
@@ -32,14 +39,14 @@ public class GetCompaniesController {
     upsert acctsToAdd Place_Id__c;
   }
 
+  @AuraEnabled
+  public static void saveAccount(String acctString) {
+    upsert prepareAccountFromId(acctString) Place_Id__c;
+  }
+
   private static Account prepareAccountFromId(String accString) {
     Company cmp = (Company) JSON.deserialize(accString, Company.class);
-    String[] addrsplit = cmp.address.split(',');
-    String country = addrsplit.remove(addrsplit.size() - 1);
-    String statezip = addrsplit.remove(addrsplit.size() - 1);
-    String zip = statezip.split(' ')[2];
-    String state = statezip.split(' ')[1];
-    String street = String.join(addrsplit, ',');
+    AddressDTO addr = parseAddress(cmp.address);
     String stdRating = '';
     if (cmp.rating != null) {
       stdRating = cmp.rating > 4 ? 'Hot' : cmp.rating > 3 ? 'Warm' : 'Cold';
@@ -74,10 +81,10 @@ public class GetCompaniesController {
     }
     Account a = new Account(
       Name = cmp.name,
-      BillingStreet = street,
-      BillingState = state,
-      BillingPostalCode = zip,
-      BillingCountry = country,
+      BillingStreet = addr.Street,
+      BillingState = addr.State,
+      BillingPostalCode = addr.Zip,
+      BillingCountry = addr.Country,
       Place_Id__c = cmp.id,
       BillingLatitude = cmp.lat,
       BillingLongitude = cmp.lng,
@@ -89,8 +96,14 @@ public class GetCompaniesController {
     return a;
   }
 
-  @AuraEnabled
-  public static void saveAccount(String acctString) {
-    upsert prepareAccountFromId(acctString) Place_Id__c;
+  private static AddressDTO parseAddress(String addrString) {
+    AddressDTO addr = new AddressDTO();
+    String[] addrsplit = addrString.split(',');
+    addr.country = addrsplit.remove(addrsplit.size() - 1);
+    String statezip = addrsplit.remove(addrsplit.size() - 1);
+    addr.zip = statezip.split(' ')[2];
+    addr.state = statezip.split(' ')[1];
+    addr.street = String.join(addrsplit, ',');
+    return addr;
   }
 }
